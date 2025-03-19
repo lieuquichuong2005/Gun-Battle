@@ -5,16 +5,24 @@ public class WeaponController : MonoBehaviour
 {
     public StarterAssetsInputs inputs;
 
+    private Camera mainCamera;
+    Animator pistolAnim;
     public GameObject bulletPrefab;
     public Transform firePosition;
+    
     public float bulletSpeed;
+    public float pistolMaxAmo;
+    public float pistolCurrentAmo;
+    int shootHash;
 
-    private Camera mainCamera;
 
     void Start()
     {
         inputs = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssetsInputs>();
+        pistolAnim = GameObject.FindWithTag("Pistol").GetComponent<Animator>();
+        shootHash = Animator.StringToHash("Shoot");
         mainCamera = Camera.main;
+
     }
     private void Update()
     {
@@ -27,25 +35,23 @@ public class WeaponController : MonoBehaviour
     }
     public void Shoot()
     {
-        if (mainCamera == null)
+        pistolAnim.SetTrigger(shootHash);
+
+        RaycastHit hit; //Lấy thông tin về vật thể mà raycast chạm vào
+        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100f))
         {
-            Debug.LogError("Camera chính chưa được gán hoặc không có Tag 'MainCamera'.");
-            return;
+            Debug.Log(hit.transform.name);
+        }
+        else
+        {
+            Debug.Log("Không chạm vào vật thể nào");
         }
 
-        Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        Vector3 targetPoint = ray.GetPoint(100f);
-        Vector3 shootDirection = (targetPoint - firePosition.position).normalized;
+        GameObject bullet = Instantiate(bulletPrefab, firePosition.position, Quaternion.identity);
 
-        GameObject bullet = Instantiate(bulletPrefab, firePosition.position, Quaternion.LookRotation(shootDirection));
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        bullet.transform.forward = firePosition.forward;
 
-        if (rb != null)
-        {
-            rb.isKinematic = false; // Đảm bảo Rigidbody hoạt động đúng với vật lý
-            rb.useGravity = false;  // Tắt trọng lực để đạn không bị rơi xuống
-            rb.linearVelocity = shootDirection * bulletSpeed * Time.deltaTime;
-        }
+
 
     }
     void OnDrawGizmos()
@@ -54,22 +60,21 @@ public class WeaponController : MonoBehaviour
         {
             Gizmos.color = Color.red;
 
-            // Lấy hướng bắn từ camera
             Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit;
             Vector3 targetPoint;
 
             if (Physics.Raycast(ray, out hit, 100f))
             {
-                targetPoint = hit.point; // Nếu chạm, lấy điểm chạm
+                targetPoint = hit.point; 
             }
             else
             {
-                targetPoint = ray.GetPoint(100f); // Nếu không chạm, lấy điểm xa trên ray
+                targetPoint = ray.GetPoint(100f); 
             }
 
-            // Vẽ đường từ firePosition đến targetPoint
             Gizmos.DrawLine(firePosition.position, targetPoint);
         }
     }
+
 }
