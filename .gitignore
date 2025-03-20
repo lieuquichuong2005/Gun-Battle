@@ -42,6 +42,7 @@
 *.temp
 *.log
 *.vsconfig
+*.bundle
 
 # Ignore các file của Visual Studio
 .vs/
