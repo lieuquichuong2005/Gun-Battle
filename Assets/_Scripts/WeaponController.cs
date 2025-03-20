@@ -1,4 +1,6 @@
 ﻿using StarterAssets;
+using System.Collections;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
@@ -11,8 +13,12 @@ public class WeaponController : MonoBehaviour
     public Transform firePosition;
     
     public float bulletSpeed;
-    public float pistolMaxAmo;
-    public float pistolCurrentAmo;
+    public float pistolMaxAmmo;
+    public float pistolCurrentAmmo;
+    public float pistolRange;
+    public float pistolShootSpeed;
+    
+    float timeToShoot = 0f;
     int shootHash;
 
 
@@ -22,23 +28,42 @@ public class WeaponController : MonoBehaviour
         pistolAnim = GameObject.FindWithTag("Pistol").GetComponent<Animator>();
         shootHash = Animator.StringToHash("Shoot");
         mainCamera = Camera.main;
+        pistolCurrentAmmo = pistolMaxAmmo;
 
     }
     private void Update()
     {
-        var shoot = inputs.shoot;
-        if (!shoot) return;
+        timeToShoot += Time.deltaTime;
 
-        Debug.Log("Shooting");
-        Shoot();
-        inputs.ShootInput(false);
+
+        var shoot = inputs.shoot;
+        if (shoot && timeToShoot > pistolShootSpeed)
+        {
+            if(pistolCurrentAmmo > 0f)
+            {
+                Shoot();
+                pistolCurrentAmmo--;
+                timeToShoot = 0;
+                inputs.ShootInput(false);
+            }
+            else
+                StartCoroutine(ReloadAmmo());
+        }    
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(ReloadAmmo());
+        }    
     }
     public void Shoot()
     {
         pistolAnim.SetTrigger(shootHash);
 
         RaycastHit hit; //Lấy thông tin về vật thể mà raycast chạm vào
-        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, 100f))
+        var hitPosition = Camera.main.transform.position + Camera.main.transform.forward * pistolRange;
+        Debug.Log(hitPosition.x + " " + hitPosition.z);
+        var shootDirection = hitPosition - firePosition.position;
+
+        if(Physics.Raycast(firePosition.position, shootDirection, out hit, pistolRange))
         {
             Debug.Log(hit.transform.name);
         }
@@ -49,7 +74,7 @@ public class WeaponController : MonoBehaviour
 
         GameObject bullet = Instantiate(bulletPrefab, firePosition.position, Quaternion.identity);
 
-        bullet.transform.forward = firePosition.forward;
+        bullet.transform.forward = shootDirection;
 
 
 
@@ -76,5 +101,9 @@ public class WeaponController : MonoBehaviour
             Gizmos.DrawLine(firePosition.position, targetPoint);
         }
     }
-
+    IEnumerator ReloadAmmo()
+    {
+        yield return new WaitForSeconds(1f);
+        pistolCurrentAmmo = pistolMaxAmmo;
+    }    
 }

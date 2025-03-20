@@ -4,6 +4,8 @@ using UnityEngine.UIElements;
 
 public class BulletController : MonoBehaviour
 {
+    public ParticleSystem bulletExplosion;
+
     public WeaponController weaponController;
     public int pistolDamage = 10;
 
@@ -24,10 +26,11 @@ public class BulletController : MonoBehaviour
     // Ki?m tra va ch?m v?i k? ??ch
     void OnCollisionEnter(Collision collision)
     {
+        bulletExplosion.Play();
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<PlayerStats>().TakeDamage(pistolDamage);
-            Destroy(this.gameObject);
+            collision.gameObject.GetComponent<PlayerStats>()?.TakeDamage(pistolDamage);
         }
+        Destroy(this.gameObject, 0.1f);
     }
 }

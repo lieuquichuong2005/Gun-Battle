@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "990638107789",
+    "project_id": "gun-battle-670d3",
+    "storage_bucket": "gun-battle-670d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990638107789:android:b467e2143cfc818e3346c4",
+        "android_client_info": {
+          "package_name": "com.quichuong2005.gunbattle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS7NFCsJSaKnqU-z2mp8w7jr0yINQTQ8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
