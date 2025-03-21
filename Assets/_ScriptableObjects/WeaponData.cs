@@ -10,4 +10,7 @@ public class WeaponData : ScriptableObject
     public float bulletSpeed;
     public float damage;
     public GameObject ammoType;
+    public AudioSource gunAudioController;
+    public AudioClip gunShot;
+    public AudioClip gunReload;
 }

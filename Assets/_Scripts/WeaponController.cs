@@ -25,7 +25,7 @@ public class WeaponController : MonoBehaviour
     void Start()
     {
         inputs = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssetsInputs>();
-        pistolAnim = GameObject.FindWithTag("Pistol").GetComponent<Animator>();
+        pistolAnim = GameObject.FindWithTag("Gun").GetComponent<Animator>();
         shootHash = Animator.StringToHash("Shoot");
         mainCamera = Camera.main;
         pistolCurrentAmmo = pistolMaxAmmo;
