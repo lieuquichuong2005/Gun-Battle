@@ -1,11 +1,14 @@
 ﻿using StarterAssets;
+
 using System.Collections;
 using UnityEditor.PackageManager.Requests;
+
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
     public StarterAssetsInputs inputs;
+
 
     private Camera mainCamera;
     Animator pistolAnim;
@@ -22,9 +25,11 @@ public class WeaponController : MonoBehaviour
     int shootHash;
 
 
+
     void Start()
     {
         inputs = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssetsInputs>();
+
         pistolAnim = GameObject.FindWithTag("Gun").GetComponent<Animator>();
         shootHash = Animator.StringToHash("Shoot");
         mainCamera = Camera.main;
@@ -78,6 +83,7 @@ public class WeaponController : MonoBehaviour
 
 
 
+
     }
     void OnDrawGizmos()
     {
@@ -85,12 +91,16 @@ public class WeaponController : MonoBehaviour
         {
             Gizmos.color = Color.red;
 
+
+            // Lấy hướng bắn từ camera
+
             Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit;
             Vector3 targetPoint;
 
             if (Physics.Raycast(ray, out hit, 100f))
             {
+
                 targetPoint = hit.point; 
             }
             else
@@ -106,4 +116,5 @@ public class WeaponController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         pistolCurrentAmmo = pistolMaxAmmo;
     }    
+
 }

@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 public class BulletController : MonoBehaviour
 {
+
     public ParticleSystem bulletExplosion;
 
     public WeaponController weaponController;
@@ -32,4 +33,5 @@ public class BulletController : MonoBehaviour
         }
         Destroy(this.gameObject, 0.1f);
     }
+
 }
