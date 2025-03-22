@@ -60,7 +60,6 @@ public class WeaponController : MonoBehaviour
 
         RaycastHit hit; //Lấy thông tin về vật thể mà raycast chạm vào
         var hitPosition = Camera.main.transform.position + Camera.main.transform.forward * pistolRange;
-        Debug.Log(hitPosition.x + " " + hitPosition.z);
         var shootDirection = hitPosition - firePosition.position;
 
         if(Physics.Raycast(firePosition.position, shootDirection, out hit, pistolRange))
