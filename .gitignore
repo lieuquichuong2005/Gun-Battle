@@ -27,7 +27,6 @@
 
 # Các file của Unity
 *.mat
-*.asset
 *.fbx
 *.jpeg
 *.tga
