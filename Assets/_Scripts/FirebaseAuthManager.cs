@@ -7,6 +7,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Database;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -172,5 +173,10 @@ public class FirebaseAuthManager : MonoBehaviour
         }
         isShowPassword = !isShowPassword;
     }
-        
+    IEnumerator EnterGame()
+    {
+        StartCoroutine(NotifyStatus("Join Game ......"));
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene(1);
+    }
 }

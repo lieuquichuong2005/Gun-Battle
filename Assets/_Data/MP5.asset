@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b267ec8c2e838b4994f17245f047cb8, type: 3}
+  m_Name: MP5
+  m_EditorClassIdentifier: 
+  weaponName: MP5
+  fireRate: 0.05
+  range: 200
+  maxAmmo: 40
+  bulletSpeed: 400
+  damage: 19
+  reloadTime: 2
+  ammoType: {fileID: 6681766636307311056, guid: d86ac54c80bc64d4da120230a87a4110, type: 3}
+  gunShot: {fileID: 8300000, guid: d458fe29dbad39d4584f60a3e1b05fe8, type: 3}
+  gunReload: {fileID: 8300000, guid: 75ab2c397167d8c4d9ebf3aeeb0c73e4, type: 3}

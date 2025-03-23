@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b267ec8c2e838b4994f17245f047cb8, type: 3}
+  m_Name: M82A1
+  m_EditorClassIdentifier: 
+  weaponName: M82A1
+  fireRate: 2
+  range: 1800
+  maxAmmo: 5
+  bulletSpeed: 853
+  damage: 120
+  reloadTime: 6
+  ammoType: {fileID: 5642858144603959214, guid: e4fdc43cc7c39fb48960032a89602f32, type: 3}
+  gunShot: {fileID: 8300000, guid: 964dfc5387a9769419a5e9dce933aced, type: 3}
+  gunReload: {fileID: 8300000, guid: 9edd28f5753faa64da375e2e28b8a706, type: 3}

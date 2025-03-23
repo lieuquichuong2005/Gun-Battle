@@ -5,12 +5,12 @@ public class WeaponData : ScriptableObject
 {
     public string weaponName;
     public float fireRate;
-    public float range;
+    public int range;
     public int maxAmmo;
-    public float bulletSpeed;
-    public float damage;
+    public int bulletSpeed;
+    public int damage;
+    public float reloadTime;
     public GameObject ammoType;
-    public AudioSource gunAudioController;
     public AudioClip gunShot;
     public AudioClip gunReload;
 }
