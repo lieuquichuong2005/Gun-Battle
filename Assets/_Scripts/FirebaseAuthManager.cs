@@ -1,20 +1,42 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using Firebase.Database;
+using TMPro;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
+    [Header("Firebase")]
     private FirebaseAuth auth;
 
-    public InputField emailInputField;
-    public InputField passwordInputField;
-    public Text statusText;
-    public Button registerButton;
-    public Button loginButton;
+    [Tooltip("Tham chiếu GameObject")]
+    [Header("GameObject")]
+    [Space(10)]
+    public GameObject confirmForm;
+    public GameObject notifyPanel;
+    [Space(10)]
+    public Button accountButton;
+    public Button switchFormButton;
+    public Button seePasswordButton;
+
+    [Space(10)]
+    public TMP_InputField usernameInputField;
+    public TMP_InputField passwordInputField;
+    public TMP_InputField ConfirmpasswordInputField;
+    [Space(10)]
+    public TMP_Text statusText;
+    public TMP_Text noteText;
+    public TMP_Text stateText;
+
+    [Tooltip("Khai báo biến")]
+    [Header("Varialbles")]
+    public bool isBeingLogIn = true;
+    public bool isShowPassword = false;
+
 
 
     void Start()
@@ -23,21 +45,62 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             FirebaseApp app = FirebaseApp.DefaultInstance;
             auth = FirebaseAuth.DefaultInstance;
-            statusText.text = "Firebase initialized!";
+            StartCoroutine(NotifyStatus("Firebase initialized!"));
         });
 
-        registerButton.onClick.AddListener(RegisterUser);
-        loginButton.onClick.AddListener(LoginUser);
+        accountButton.onClick.AddListener(OnAccountButtonClicked);
+        switchFormButton.onClick.AddListener(OnSwitchFormClicked);
+
     }
 
-    void RegisterUser()
+    void OnSwitchFormClicked()
     {
-        string email = emailInputField.text;
-        string password = passwordInputField.text;
-
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (isBeingLogIn)
         {
-            statusText.text = "Email and password cannot be empty!";
+            confirmForm.SetActive(true);
+            noteText.text = "Already have an account";
+            stateText.text = "REGISTER";
+            switchFormButton.GetComponentInChildren<TMP_Text>().text = "Log In Now";
+            accountButton.GetComponentInChildren<TMP_Text>().text = "Register";
+        }
+        else
+        {
+            confirmForm.SetActive(false);
+            noteText.text = "Do not have an account";
+            stateText.text = "LOG IN";
+            switchFormButton.GetComponentInChildren<TMP_Text>().text = "Register Now";
+            accountButton.GetComponentInChildren<TMP_Text>().text = "Log In";
+        }    
+        isBeingLogIn = !isBeingLogIn;
+    }
+        
+    void OnAccountButtonClicked()
+    {
+        if(isBeingLogIn)
+        {
+            LogInAccount();
+        }
+        else
+        {
+            RegisterAccount();
+        } 
+            
+    }
+        
+    void RegisterAccount()
+    {
+        string email = usernameInputField.text;
+        string password = passwordInputField.text;
+        string confirmPassword = ConfirmpasswordInputField.text;
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+        {
+            StartCoroutine(NotifyStatus("Email and password cannot be empty!"));
+            return;
+        }
+        if(passwordInputField.text != ConfirmpasswordInputField.text)
+        {
+            StartCoroutine(NotifyStatus("Password and Confirm Password do not match"));
             return;
         }
 
@@ -45,28 +108,28 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             if (task.IsCanceled)
             {
-                statusText.text = "Registration canceled.";
+                StartCoroutine(NotifyStatus("Registration canceled."));
                 return;
             }
             if (task.IsFaulted)
             {
-                statusText.text = "Registration failed: " + task.Exception.GetBaseException().Message;
+                StartCoroutine(NotifyStatus("Registration failed." /* task.Exception.GetBaseException().Message*/));
                 return;
             }
 
             FirebaseUser newUser = task.Result.User;
-            statusText.text = "Registration successful! User: " + newUser.Email;
+                StartCoroutine(NotifyStatus("Registration successful! User: " + newUser.Email.Split('@')[0]));
         });
     }
 
-    void LoginUser()
+    void LogInAccount()
     {
-        string email = emailInputField.text;
+        string email = usernameInputField.text;
         string password = passwordInputField.text;
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            statusText.text = "Email and password cannot be empty!";
+            StartCoroutine(NotifyStatus("Email and password cannot be empty!"));
             return;
         }
 
@@ -74,17 +137,40 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             if (task.IsCanceled)
             {
-                statusText.text = "Login canceled.";
+                StartCoroutine(NotifyStatus(statusText.text = "Login canceled."));
                 return;
             }
             if (task.IsFaulted)
             {
-                statusText.text = "Login failed: " + task.Exception.GetBaseException().Message;
+                StartCoroutine(NotifyStatus(statusText.text = "Login failed." /*task.Exception.GetBaseException().Message*/));
                 return;
             }
 
             FirebaseUser user = task.Result.User;
-            statusText.text = "Login successful! Welcome, " + user.Email;
+            StartCoroutine(NotifyStatus("Login successful! Welcome, " + user.Email.Split('@')[0]));
         });
     }
+    IEnumerator NotifyStatus(string textToNotify)
+    {
+        notifyPanel.SetActive(true);
+        statusText.text = textToNotify;
+        yield return new WaitForSeconds(3);
+        notifyPanel.SetActive(false);
+
+    }
+    void OnShowPasswordButtonClicked()
+    {
+        if(isShowPassword)
+        {
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Password;
+        }
+        else
+        {
+            passwordInputField.contentType = TMP_InputField.ContentType.Standard;
+            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Standard;
+        }
+        isShowPassword = !isShowPassword;
+    }
+        
 }
