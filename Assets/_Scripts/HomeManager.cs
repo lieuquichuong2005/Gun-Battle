@@ -26,6 +26,7 @@ public class HomeManager : MonoBehaviour
     public Button allModeButton;
     [Space(10)]
     [Tooltip("Currency amount texts")]
+    public TMP_Text coinAmountText;
     public TMP_Text goldAmountText;
     public TMP_Text diamondAmountText;
     [Space(10)]
