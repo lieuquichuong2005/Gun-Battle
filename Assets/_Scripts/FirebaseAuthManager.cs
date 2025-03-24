@@ -13,17 +13,18 @@ public class FirebaseAuthManager : MonoBehaviour
 {
     [Header("Firebase")]
     private FirebaseAuth auth;
+    [Space(10)]
 
     [Tooltip("Tham chiếu GameObject")]
     [Header("GameObject")]
     [Space(10)]
+    public GameObject accountManager;
     public GameObject confirmForm;
     public GameObject notifyPanel;
     [Space(10)]
     public Button accountButton;
     public Button switchFormButton;
     public Button seePasswordButton;
-
     [Space(10)]
     public TMP_InputField usernameInputField;
     public TMP_InputField passwordInputField;
@@ -46,11 +47,13 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             FirebaseApp app = FirebaseApp.DefaultInstance;
             auth = FirebaseAuth.DefaultInstance;
-            StartCoroutine(NotifyStatus("Firebase initialized!"));
+            //StartCoroutine(NotifyStatus("Firebase initialized!"));
         });
 
         accountButton.onClick.AddListener(OnAccountButtonClicked);
         switchFormButton.onClick.AddListener(OnSwitchFormClicked);
+        accountManager.gameObject.SetActive(true);
+        seePasswordButton.onClick.AddListener(OnShowPasswordButtonClicked);
 
     }
 
@@ -119,7 +122,9 @@ public class FirebaseAuthManager : MonoBehaviour
             }
 
             FirebaseUser newUser = task.Result.User;
-                StartCoroutine(NotifyStatus("Registration successful! User: " + newUser.Email.Split('@')[0]));
+            StartCoroutine(NotifyStatus("Registration successful! User: " + newUser.Email.Split('@')[0]));
+            accountManager.gameObject.SetActive(false);
+            GameManager.instance.LoadNewScene("HomeScene");
         });
     }
 
@@ -149,6 +154,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
             FirebaseUser user = task.Result.User;
             StartCoroutine(NotifyStatus("Login successful! Welcome, " + user.Email.Split('@')[0]));
+            accountManager.gameObject.SetActive(false);
+            GameManager.instance.LoadNewScene("HomeScene");
         });
     }
     IEnumerator NotifyStatus(string textToNotify)
@@ -163,14 +170,21 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         if(isShowPassword)
         {
-            passwordInputField.contentType = TMP_InputField.ContentType.Password;
-            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Password;
-        }
-        else
-        {
             passwordInputField.contentType = TMP_InputField.ContentType.Standard;
             ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Standard;
         }
+        else
+        {
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Password;
+        }
+
+        passwordInputField.ForceLabelUpdate();
+        ConfirmpasswordInputField.ForceLabelUpdate();
+
+        passwordInputField.Select();
+        ConfirmpasswordInputField.Select();
+
         isShowPassword = !isShowPassword;
     }
     IEnumerator EnterGame()
