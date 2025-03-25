@@ -39,7 +39,6 @@
 *.temp
 *.log
 *.vsconfig
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_7_0.bundle.meta
 
 # Ignore các file của Visual Studio
 .vs/
