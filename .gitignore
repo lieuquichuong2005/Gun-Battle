@@ -27,7 +27,6 @@
 .vs/
 
 # Các file của Unity
-*.tga
 *.exe
 *.so
 *.dylib
