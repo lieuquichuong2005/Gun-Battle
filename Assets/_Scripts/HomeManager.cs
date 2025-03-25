@@ -7,7 +7,7 @@ public class HomeManager : MonoBehaviour
 {
     [Header("References")]
     [Space(10)]
-    //public NetworkManager networkManager;
+    public NetworkManager networkManager;
     [Space(10)]
     [Tooltip("Setting panel reference")]
     public GameObject settingPanel;
@@ -36,6 +36,7 @@ public class HomeManager : MonoBehaviour
     public GameObject lobbyPanel;
     public Button createRoomButton;
     public TMP_InputField roomNameCreateInputField;
+    public Dropdown mountOfPeopleDropdown;
     public Toggle isUsePasswordToggle;
     public TMP_InputField roomPasswordCreateInputField;
     public Button joinRoomButton;
@@ -62,13 +63,19 @@ public class HomeManager : MonoBehaviour
         rankButton.onClick.AddListener(OnRankButtonClicked);
         allModeButton.onClick.AddListener(OnAllModeButtonClicked);
         settingsButton.onClick.AddListener(OnSettingsButtonClicked);
+        createRoomButton.onClick.AddListener(OnCreateRoomButtonClicked);
+        closeButton.onClick.AddListener(delegate { OnCloseButtonClicked(); });
 
         musicSlider.onValueChanged.AddListener(delegate { OnMusicSliderValueChanged(); });
         soundSlider.onValueChanged.AddListener(delegate { OnSoundSliderValueChanged(); });
+
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionDropdownValueChanged(); });
+        //mountOfPeopleDropdown.onValueChanged.AddListener(default { OnMountOfPeopleDropdownValueChanged()});
+
         fullscreenToggle.onValueChanged.AddListener(delegate { OnFullscreenToggleValueChanged(); });
-        roomPasswordCreateInputField.onValueChanged.AddListener(delegate { OnroomPasswordCreateInputFieldValueChanged(); });
         isUsePasswordToggle.onValueChanged.AddListener(delegate { OnIsUsePasswordToggleValueChanged(); });
+
+        roomPasswordCreateInputField.onValueChanged.AddListener(delegate { OnroomPasswordCreateInputFieldValueChanged(); });
 
         lobbyPanel.SetActive(false);
         settingPanel.SetActive(false);
@@ -80,6 +87,7 @@ public class HomeManager : MonoBehaviour
     void OnPlayButtonClicked()
     {
         lobbyPanel.SetActive(true);
+        closeButton.gameObject.SetActive(true);
         roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn); 
         PlayButtonClickSound();
 
@@ -101,6 +109,7 @@ public class HomeManager : MonoBehaviour
     void OnSettingsButtonClicked()
     {
         settingPanel.SetActive(true);
+        closeButton.gameObject.SetActive(true);
         PlayButtonClickSound();
     }
 
@@ -163,6 +172,7 @@ public class HomeManager : MonoBehaviour
     public void OpenAccountPanel()
     {
         accountPanel.SetActive(true);
+        closeButton.gameObject.SetActive(true);
         PlayButtonClickSound();
     }
 
@@ -187,13 +197,24 @@ public class HomeManager : MonoBehaviour
     {
         roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
     }
+        
     public void JoinRoom(string roomName)
     {
-        //networkManager.JoinRoom(roomName);
+        networkManager.JoinRoom(roomName);
     }
 
-    public void SearchRoom()
+    void OnCreateRoomButtonClicked()
     {
-        //networkManager.SearchRoom(roomNameJoinInputField.text);
+        int maxPlayers = int.Parse(mountOfPeopleDropdown.options[mountOfPeopleDropdown.value].text);
+        networkManager.CreateRoom(roomNameCreateInputField.text, maxPlayers, isUsePasswordToggle, roomPasswordCreateInputField.text);
     }
+    void OnCloseButtonClicked()
+    {
+        PlayButtonClickSound();
+        settingPanel.SetActive(false);
+        lobbyPanel.SetActive(false);
+        //accountPanel.SetActive(false);
+        
+    }
+        
 }
