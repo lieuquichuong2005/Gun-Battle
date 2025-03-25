@@ -39,7 +39,9 @@ public class FirebaseAuthManager : MonoBehaviour
     public bool isBeingLogIn = true;
     public bool isShowPassword = false;
 
-
+    public AudioSource musicAudioController;
+    public AudioSource sfxAudioController;
+    public AudioClip clickSound;
 
     void Start()
     {
@@ -170,13 +172,13 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         if(isShowPassword)
         {
-            passwordInputField.contentType = TMP_InputField.ContentType.Standard;
-            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Standard;
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Password;
         }
         else
         {
-            passwordInputField.contentType = TMP_InputField.ContentType.Password;
-            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.contentType = TMP_InputField.ContentType.Standard;
+            ConfirmpasswordInputField.contentType = TMP_InputField.ContentType.Standard;
         }
 
         passwordInputField.ForceLabelUpdate();

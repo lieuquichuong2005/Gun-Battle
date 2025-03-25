@@ -17,6 +17,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.GameVersion = gameVersion;
+        DontDestroyOnLoad(gameObject);
     }
 
     public override void OnConnectedToMaster()
@@ -40,12 +41,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         Debug.Log("Created Room: " + PhotonNetwork.CurrentRoom.Name);
+        //PhotonNetwork.LoadLevel("BattleScene");
+        //SpawnPlayer(); // Tạo nhân vật khi vào phòng
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined Room: " + PhotonNetwork.CurrentRoom.Name);
-        PhotonNetwork.LoadLevel("GameScene");
+        //PhotonNetwork.LoadLevel("BattleScene");
+        //SpawnPlayer(); // Tạo nhân vật khi vào phòng
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -55,24 +59,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string roomName, int maxPlayers, bool isUsePassword, string password)
     {
-        if (string.IsNullOrEmpty(roomName))
+        if(PhotonNetwork.IsConnected)
         {
-            Debug.LogError("Room name is empty");
-            return;
+            if (string.IsNullOrEmpty(roomName))
+            {
+                Debug.LogError("Room name is empty");
+                return;
+            }
+
+            RoomOptions roomOptions = new RoomOptions
+            {
+                MaxPlayers = (byte)maxPlayers
+            };
+
+            if (isUsePassword && !string.IsNullOrEmpty(password))
+            {
+                roomOptions.CustomRoomPropertiesForLobby = new string[] { "Password" };
+                roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "Password", password } };
+            }
+
+            PhotonNetwork.CreateRoom(roomName, roomOptions);
         }
-
-        RoomOptions roomOptions = new RoomOptions
-        {
-            MaxPlayers = (byte)maxPlayers
-        };
-
-        if (isUsePassword && !string.IsNullOrEmpty(password))
-        {
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "Password" };
-            roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "Password", password } };
-        }
-
-        PhotonNetwork.CreateRoom(roomName, roomOptions);
+        
     }
 
     public void JoinRoom(string roomName, string passwordInput = "")
@@ -117,4 +125,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             roomListItems.Add(roomListItem);
         }
     }
+
+    
 }

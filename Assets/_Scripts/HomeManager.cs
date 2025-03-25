@@ -10,10 +10,11 @@ public class HomeManager : MonoBehaviour
     public NetworkManager networkManager;
     [Space(10)]
     [Tooltip("Setting panel reference")]
+    public GameObject canvas;
     public GameObject settingPanel;
     public Slider musicSlider;
     public Slider soundSlider;
-    public Toggle fullscreenToggle;     
+    public Toggle fullscreenToggle;
     public TMP_Dropdown resolutionDropdown;
     [Space(10)]
     [Tooltip("Account panel reference")]
@@ -36,7 +37,7 @@ public class HomeManager : MonoBehaviour
     public GameObject lobbyPanel;
     public Button createRoomButton;
     public TMP_InputField roomNameCreateInputField;
-    public Dropdown mountOfPeopleDropdown;
+    public TMP_Dropdown mountOfPeopleDropdown;
     public Toggle isUsePasswordToggle;
     public TMP_InputField roomPasswordCreateInputField;
     public Button joinRoomButton;
@@ -50,48 +51,45 @@ public class HomeManager : MonoBehaviour
     public Button closeButton;
     [Space(10)]
     public AudioSource musicAudioController;
-    //public AudioClip musicSound;
     public AudioSource sfxAudioController;
     public AudioClip buttonClickClip;
 
-    [Header("Audio Settings")]
-    public AudioMixer audioMixer;
+    // Loại bỏ AudioMixer
+    // [Header("Audio Settings")]
+    // public AudioMixer audioMixer;
 
     private void Awake()
     {
+        canvas.gameObject.SetActive(true);
+
         playButton.onClick.AddListener(OnPlayButtonClicked);
         rankButton.onClick.AddListener(OnRankButtonClicked);
         allModeButton.onClick.AddListener(OnAllModeButtonClicked);
         settingsButton.onClick.AddListener(OnSettingsButtonClicked);
         createRoomButton.onClick.AddListener(OnCreateRoomButtonClicked);
-        closeButton.onClick.AddListener(delegate { OnCloseButtonClicked(); });
+        closeButton.onClick.AddListener(OnCloseButtonClicked);
+        joinRoomButton.onClick.AddListener(OnJoinRoomButtonClicked);
 
         musicSlider.onValueChanged.AddListener(delegate { OnMusicSliderValueChanged(); });
         soundSlider.onValueChanged.AddListener(delegate { OnSoundSliderValueChanged(); });
 
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionDropdownValueChanged(); });
-        //mountOfPeopleDropdown.onValueChanged.AddListener(default { OnMountOfPeopleDropdownValueChanged()});
-
         fullscreenToggle.onValueChanged.AddListener(delegate { OnFullscreenToggleValueChanged(); });
         isUsePasswordToggle.onValueChanged.AddListener(delegate { OnIsUsePasswordToggleValueChanged(); });
-
         roomPasswordCreateInputField.onValueChanged.AddListener(delegate { OnroomPasswordCreateInputFieldValueChanged(); });
 
-        lobbyPanel.SetActive(false);
-        settingPanel.SetActive(false);
-        accountPanel.SetActive(false);
+        lobbyPanel.gameObject.SetActive(false);
+        settingPanel.gameObject.SetActive(false);
 
         musicAudioController.Play();
     }
 
     void OnPlayButtonClicked()
     {
-        lobbyPanel.SetActive(true);
+        lobbyPanel.gameObject.SetActive(true);
         closeButton.gameObject.SetActive(true);
-        roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn); 
+        roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
         PlayButtonClickSound();
-
-        //networkManager.CreateRoom(roomNameCreateInputField.text, isUsePasswordToggle.isOn, roomPasswordCreateInputField.text);
     }
 
     void OnRankButtonClicked()
@@ -123,13 +121,19 @@ public class HomeManager : MonoBehaviour
 
     void OnMusicSliderValueChanged()
     {
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(musicSlider.value) * 20);
+        if (musicAudioController != null)
+        {
+            musicAudioController.volume = musicSlider.value;
+        }
         SaveSettings();
     }
 
     void OnSoundSliderValueChanged()
     {
-        audioMixer.SetFloat("SoundVolume", Mathf.Log10(soundSlider.value) * 20);
+        if (sfxAudioController != null)
+        {
+            sfxAudioController.volume = soundSlider.value;
+        }
         SaveSettings();
     }
 
@@ -166,7 +170,7 @@ public class HomeManager : MonoBehaviour
         OnMusicSliderValueChanged();
         OnSoundSliderValueChanged();
         OnResolutionDropdownValueChanged();
-        OnFullscreenToggleValueChanged(); 
+        OnFullscreenToggleValueChanged();
     }
 
     public void OpenAccountPanel()
@@ -185,19 +189,20 @@ public class HomeManager : MonoBehaviour
     public void CloseLobbyPanel()
     {
         lobbyPanel.SetActive(false);
-        roomPasswordCreateInputField.gameObject.SetActive(false); // Ẩn InputField khi đóng lobby
+        roomPasswordCreateInputField.gameObject.SetActive(false);
         PlayButtonClickSound();
     }
-    
+
     void OnroomPasswordCreateInputFieldValueChanged()
     {
         roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
     }
+
     void OnIsUsePasswordToggleValueChanged()
     {
         roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
     }
-        
+
     public void JoinRoom(string roomName)
     {
         networkManager.JoinRoom(roomName);
@@ -206,15 +211,20 @@ public class HomeManager : MonoBehaviour
     void OnCreateRoomButtonClicked()
     {
         int maxPlayers = int.Parse(mountOfPeopleDropdown.options[mountOfPeopleDropdown.value].text);
-        networkManager.CreateRoom(roomNameCreateInputField.text, maxPlayers, isUsePasswordToggle, roomPasswordCreateInputField.text);
+        networkManager.CreateRoom(roomNameCreateInputField.text, maxPlayers, isUsePasswordToggle.isOn, roomPasswordCreateInputField.text);
+        canvas.SetActive(false);
+        GameManager.instance.LoadNewScene("BattleScene");
     }
+    void OnJoinRoomButtonClicked()
+    {
+        networkManager.JoinRoom(roomNameJoinInputField.text, null);
+        GameManager.instance.LoadNewScene("BattleScene");
+    }    
     void OnCloseButtonClicked()
     {
         PlayButtonClickSound();
-        settingPanel.SetActive(false);
-        lobbyPanel.SetActive(false);
-        //accountPanel.SetActive(false);
-        
+        settingPanel.gameObject.SetActive(false);
+        lobbyPanel.gameObject.SetActive(false);
+        closeButton.gameObject.SetActive(false);
     }
-        
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -9,7 +10,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : MonoBehaviourPun
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -88,8 +89,14 @@ namespace StarterAssets
 
 		private void Awake()
 		{
-			// get a reference to our main camera
-			if (_mainCamera == null)
+            if (!photonView.IsMine)
+            {
+                // Nếu không phải của người chơi, vô hiệu hóa điều khiển
+                this.enabled = false; // Tắt script này để không điều khiển
+                return;
+            }
+            // get a reference to our main camera
+            if (_mainCamera == null)
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
@@ -97,7 +104,13 @@ namespace StarterAssets
 
 		private void Start()
 		{
-			_controller = GetComponent<CharacterController>();
+            if (!photonView.IsMine)
+            {
+                // Nếu không phải của người chơi, vô hiệu hóa điều khiển
+                this.enabled = false; // Tắt script này để không điều khiển
+                return;
+            }
+            _controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
@@ -112,7 +125,9 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			JumpAndGravity();
+            if (!photonView.IsMine) return;
+
+            JumpAndGravity();
 			GroundedCheck();
 			Move();
 		}
