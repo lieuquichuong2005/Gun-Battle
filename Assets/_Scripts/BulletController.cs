@@ -7,19 +7,19 @@ public class BulletController : MonoBehaviour
 
     public ParticleSystem bulletExplosion;
 
-    public WeaponController weaponController;
+    public GunController gunController;
 
     Rigidbody rb;
     private void Start()
     {
-        weaponController = GameObject.FindWithTag("WeaponController").GetComponent<WeaponController>();
+        gunController = GameObject.FindWithTag("WeaponController").GetComponent<GunController>();
         Rigidbody rb = GetComponent<Rigidbody>();
 
         if (rb != null)
         {
             rb.isKinematic = false;
             rb.useGravity = false;
-            rb.linearVelocity = transform.forward * weaponController.bulletSpeed * Time.deltaTime;
+            rb.linearVelocity = transform.forward * gunController.weaponDataArray[gunController.currentWeaponIndex].bulletSpeed * Time.deltaTime;
         }
         Destroy(this.gameObject, 15f);
     }

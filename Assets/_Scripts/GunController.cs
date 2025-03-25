@@ -1,12 +1,14 @@
 ﻿using StarterAssets;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
     [Header("Weapon Settings")]
-    public WeaponData[] weaponDataArray; // Mảng chứa tất cả vũ khí
-    public Transform[] firePosition;
+    public WeaponData[] weaponDataArray;
+    public GameObject[] weaponsModel;
+    public Transform[] firePoint;
 
     [Header("References")]
     public StarterAssetsInputs inputs;
@@ -14,7 +16,8 @@ public class GunController : MonoBehaviour
     private Camera mainCamera;
     private Animator weaponAnimator;
 
-    private int currentWeaponIndex = 0;
+    public int currentWeaponIndex = 0;
+    public TMP_Text ammoMount;
     private float currentAmmo;
     private float timeToShoot = 0f;
 
@@ -22,11 +25,11 @@ public class GunController : MonoBehaviour
 
     void Start()
     {
-        inputs = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssetsInputs>();
         mainCamera = Camera.main;
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
 
-        EquipWeapon(0);  // Trang bị vũ khí đầu tiên
+        EquipWeapon(0);
+        UpdateAmmoUI();
     }
 
     void Update()
@@ -67,23 +70,23 @@ public class GunController : MonoBehaviour
 
         currentWeaponIndex = index;
         currentAmmo = weaponDataArray[currentWeaponIndex].maxAmmo;
-        Debug.Log($"Đã trang bị: {weaponDataArray[currentWeaponIndex].weaponName}");
+        ChangeWeapon(index);
     }
 
     void Shoot()
     {
-        weaponAnimator.SetTrigger(shootHash);
+        weaponAnimator?.SetTrigger(shootHash);
 
         if (weaponDataArray[currentWeaponIndex].gunShot != null)
         {
             audioSource.PlayOneShot(weaponDataArray[currentWeaponIndex].gunShot);
         }
 
-        RaycastHit hit;
+        RaycastHit hit; //Lấy thông tin về vật thể mà raycast chạm vào
         var hitPosition = Camera.main.transform.position + Camera.main.transform.forward * weaponDataArray[currentWeaponIndex].range;
-        var shootDirection = hitPosition - firePosition[currentWeaponIndex].position;
+        var shootDirection = hitPosition - firePoint[currentWeaponIndex].position;
 
-        if (Physics.Raycast(mainCamera.transform.position, shootDirection, out hit, weaponDataArray[currentWeaponIndex].range))
+        if (Physics.Raycast(firePoint[currentWeaponIndex].position, shootDirection, out hit, weaponDataArray[currentWeaponIndex].range))
         {
             Debug.Log($"Trúng: {hit.transform.name}");
 
@@ -94,13 +97,13 @@ public class GunController : MonoBehaviour
             }
         }
 
-        GameObject bullet = Instantiate(weaponDataArray[currentWeaponIndex].ammoType, firePosition[currentWeaponIndex].position, Quaternion.identity);
-        bullet.transform.forward = shootDirection * weaponDataArray[currentWeaponIndex].bulletSpeed;
+        GameObject bullet = Instantiate(weaponDataArray[currentWeaponIndex].ammoType, firePoint[currentWeaponIndex].position, firePoint[currentWeaponIndex].rotation);
+        bullet.transform.forward = shootDirection;
+        UpdateAmmoUI();
     }
 
     IEnumerator ReloadAmmo()
     {
-        Debug.Log("Đang nạp đạn...");
 
         if (weaponDataArray[currentWeaponIndex].gunReload != null)
         {
@@ -110,6 +113,18 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(weaponDataArray[currentWeaponIndex].reloadTime);
         currentAmmo = weaponDataArray[currentWeaponIndex].maxAmmo;
 
-        Debug.Log($"{weaponDataArray[currentWeaponIndex].weaponName} đã nạp đầy đạn ({currentAmmo}/{weaponDataArray[currentWeaponIndex].maxAmmo})");
+        UpdateAmmoUI();
+    }
+    void UpdateAmmoUI()
+    {
+        ammoMount.text = currentAmmo + "/" + weaponDataArray[currentWeaponIndex].maxAmmo;
+    }
+    void ChangeWeapon(int index)
+    {
+        foreach(GameObject weapon in weaponsModel)
+        {
+            weapon.gameObject.SetActive(false);
+        }
+        weaponsModel[index].gameObject.SetActive(true);
     }
 }

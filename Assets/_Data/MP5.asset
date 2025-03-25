@@ -16,7 +16,7 @@ MonoBehaviour:
   fireRate: 0.05
   range: 200
   maxAmmo: 40
-  bulletSpeed: 400
+  bulletSpeed: 15000
   damage: 19
   reloadTime: 2
   ammoType: {fileID: 6681766636307311056, guid: d86ac54c80bc64d4da120230a87a4110, type: 3}
