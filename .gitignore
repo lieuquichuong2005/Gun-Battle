@@ -27,9 +27,6 @@
 .vs/
 
 # Các file của Unity
-*.mat
-*.fbx
-*.jpeg
 *.tga
 *.exe
 *.so
