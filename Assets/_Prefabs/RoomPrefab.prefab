@@ -957,3 +957,4 @@ MonoBehaviour:
   roomNameText: {fileID: 3973140087473060830}
   playerCountText: {fileID: 6398730516086640202}
   passwordStatusText: {fileID: 2927791278695074791}
+  joinRoomButton: {fileID: 4163664963834327804}

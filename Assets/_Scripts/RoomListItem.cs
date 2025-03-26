@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class RoomListItem : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class RoomListItem : MonoBehaviour
 
     private NetworkManager networkManager;
     private string roomName;
+
+    public Button joinRoomButton;
+
+    private void Awake()
+    {
+        joinRoomButton.onClick.AddListener(OnJoinButtonClicked);
+    }
 
     public void Setup(RoomInfo room, NetworkManager manager, string passwordStatus)
     {

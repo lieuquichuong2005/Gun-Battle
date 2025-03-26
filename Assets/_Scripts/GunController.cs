@@ -2,8 +2,9 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
-public class GunController : MonoBehaviour
+public class GunController : MonoBehaviourPunCallbacks
 {
     [Header("Weapon Settings")]
     public WeaponData[] weaponDataArray;
@@ -25,6 +26,12 @@ public class GunController : MonoBehaviour
 
     void Start()
     {
+        if(!photonView.IsMine)
+        {
+            this.enabled = false;
+            return;
+        }
+        inputs = GameObject.FindWithTag("Player").GetComponent<StarterAssetsInputs>();
         mainCamera = Camera.main;
         audioSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
 
