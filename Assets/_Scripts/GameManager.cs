@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using TMPro;
-using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -64,14 +63,12 @@ public class GameManager : MonoBehaviour
     }
     void SpawnPlayer()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameObject player = PhotonNetwork.Instantiate("Player", new Vector3(Random.Range(-5, 5), 0, Random.Range(-10, 10)), Quaternion.identity);
 
-            GameObject playerCamera = Instantiate(playerCameraPrefab);
+            //GameObject player = Instantiate("Player", new Vector3(Random.Range(-5, 5), 0, Random.Range(-10, 10)), Quaternion.identity);
+            GameObject player = Instantiate(Resources.Load("Player"), new Vector3(Random.Range(-5, 5), 0, Random.Range(-10, 10)), Quaternion.identity) as GameObject;
+        GameObject playerCamera = Instantiate(playerCameraPrefab);
             playerCamera.transform.SetParent(player.transform);
             playerCamera.transform.localPosition = Vector3.zero;
             playerCamera.transform.localRotation = Quaternion.identity;
-        }
     }
 }

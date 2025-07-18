@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3575987156560249661}
   - component: {fileID: 7233087830035663144}
   - component: {fileID: 6974380900685404280}
+  - component: {fileID: 584677027974853262}
+  - component: {fileID: -235994775266608410}
   m_Layer: 0
   m_Name: SniperBullet
   m_TagString: Untagged
@@ -69,8 +71,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f7b6e00ef8e1d44a65a13ebc9ac075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletExplosion: {fileID: 1010849390764672873}
-  weaponController: {fileID: 0}
+  speed: 20
+  lifetime: 5
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  _Direction: {x: 0, y: 0, z: 0}
+  _Speed: 0
+  _Damage: 0
+--- !u!114 &584677027974853262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642858144603959214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 945750601
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 6974380900685404280}
+  ForceRemoteRenderTimeframe: 0
+--- !u!54 &-235994775266608410
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642858144603959214}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7634787681260851454
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,10 +331,5 @@ PrefabInstance:
 --- !u!4 &1010849390746395293 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 403952, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
-  m_PrefabInstance: {fileID: 1010849390746520429}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1010849390764672873 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19860484, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
   m_PrefabInstance: {fileID: 1010849390746520429}
   m_PrefabAsset: {fileID: 0}

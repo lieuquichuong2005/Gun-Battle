@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2787594106011184721}
   - component: {fileID: 2872493325175396994}
   - component: {fileID: 6614467423212856429}
+  - component: {fileID: 2526684898239381480}
   m_Layer: 0
   m_Name: M16A1Bullet
   m_TagString: Untagged
@@ -79,8 +80,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f7b6e00ef8e1d44a65a13ebc9ac075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletExplosion: {fileID: 3224351445451683879}
-  weaponController: {fileID: 0}
+  speed: 20
+  lifetime: 5
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  _Direction: {x: 0, y: 0, z: 0}
+  _Speed: 0
+  _Damage: 0
 --- !u!95 &6614467423212856429
 Animator:
   serializedVersion: 7
@@ -103,6 +110,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2526684898239381480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086261179823682334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2575130127
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2872493325175396994}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &8155758887353419079
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,10 +303,5 @@ PrefabInstance:
 --- !u!4 &3224351445432344019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 403952, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
-  m_PrefabInstance: {fileID: 3224351445432480803}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &3224351445451683879 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19860484, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
   m_PrefabInstance: {fileID: 3224351445432480803}
   m_PrefabAsset: {fileID: 0}

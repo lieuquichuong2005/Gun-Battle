@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: M82A1
   m_EditorClassIdentifier: 
   weaponName: M82A1
-  fireRate: 2
+  fireRate: 0.5
   range: 1800
   maxAmmo: 5
-  bulletSpeed: 30000
+  bulletSpeed: 10
   damage: 120
   reloadTime: 6
-  ammoType: {fileID: 5642858144603959214, guid: e4fdc43cc7c39fb48960032a89602f32, type: 3}
+  ammoType:
+    RawGuidValue: e4fdc43cc7c39fb48960032a89602f32
   gunShot: {fileID: 8300000, guid: 964dfc5387a9769419a5e9dce933aced, type: 3}
   gunReload: {fileID: 8300000, guid: 9edd28f5753faa64da375e2e28b8a706, type: 3}
+  firePosition: {fileID: 0}

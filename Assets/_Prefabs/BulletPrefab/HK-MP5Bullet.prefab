@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 504510284418696551}
   - component: {fileID: 5559459377487417721}
   - component: {fileID: 2927917253652987922}
+  - component: {fileID: 6364440005312936475}
   m_Layer: 0
   m_Name: HK-MP5Bullet
   m_TagString: Untagged
@@ -187,8 +188,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f7b6e00ef8e1d44a65a13ebc9ac075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletExplosion: {fileID: 2853082685831876615}
-  weaponController: {fileID: 0}
+  speed: 20
+  lifetime: 5
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  _Direction: {x: 0, y: 0, z: 0}
+  _Speed: 0
+  _Damage: 0
+--- !u!114 &6364440005312936475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6681766636307311056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3802683608
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2927917253652987922}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &2853082685817789443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -277,10 +303,5 @@ PrefabInstance:
 --- !u!4 &2853082685817665011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 403952, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
-  m_PrefabInstance: {fileID: 2853082685817789443}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &2853082685831876615 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19860484, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
   m_PrefabInstance: {fileID: 2853082685817789443}
   m_PrefabAsset: {fileID: 0}

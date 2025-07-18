@@ -1,14 +1,9 @@
-﻿using StarterAssets;
-
+﻿using Fusion;
 using System.Collections;
-using UnityEditor.PackageManager.Requests;
-
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public StarterAssetsInputs inputs;
-
 
     private Camera mainCamera;
     Animator pistolAnim;
@@ -28,8 +23,6 @@ public class WeaponController : MonoBehaviour
 
     void Start()
     {
-        inputs = GameObject.FindGameObjectWithTag("Player").GetComponent<StarterAssetsInputs>();
-
         pistolAnim = GameObject.FindWithTag("Gun").GetComponent<Animator>();
         shootHash = Animator.StringToHash("Shoot");
         mainCamera = Camera.main;
@@ -41,15 +34,13 @@ public class WeaponController : MonoBehaviour
         timeToShoot += Time.deltaTime;
 
 
-        var shoot = inputs.shoot;
-        if (shoot && timeToShoot > pistolShootSpeed)
+        if ((Input.GetMouseButton(0)) && timeToShoot > pistolShootSpeed)
         {
             if(pistolCurrentAmmo > 0f)
             {
                 Shoot();
                 pistolCurrentAmmo--;
                 timeToShoot = 0;
-                inputs.ShootInput(false);
             }
             else
                 StartCoroutine(ReloadAmmo());
@@ -61,7 +52,7 @@ public class WeaponController : MonoBehaviour
     }
     public void Shoot()
     {
-        pistolAnim.SetTrigger(shootHash);
+        pistolAnim.SetTrigger("Shoot");
 
         RaycastHit hit; //Lấy thông tin về vật thể mà raycast chạm vào
         var hitPosition = Camera.main.transform.position + Camera.main.transform.forward * pistolRange;
@@ -79,10 +70,6 @@ public class WeaponController : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePosition.position, Quaternion.identity);
 
         bullet.transform.forward = shootDirection;
-
-
-
-
     }
     void OnDrawGizmos()
     {

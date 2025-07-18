@@ -2,12 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using Fusion;
+using UnityEngine.SceneManagement;
 
 public class HomeManager : MonoBehaviour
 {
+    public static HomeManager instance;
+
     [Header("References")]
     [Space(10)]
-    public NetworkManager networkManager;
     [Space(10)]
     [Tooltip("Setting panel reference")]
     public GameObject canvas;
@@ -54,21 +57,32 @@ public class HomeManager : MonoBehaviour
     public AudioSource sfxAudioController;
     public AudioClip buttonClickClip;
 
+    public GameMode gameMode;
+    
     // Loại bỏ AudioMixer
     // [Header("Audio Settings")]
     // public AudioMixer audioMixer;
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         canvas.gameObject.SetActive(true);
 
+        createRoomButton.onClick.AddListener(OnCreateRoomButtonClicked);
+        joinRoomButton.onClick.AddListener(OnJoinRoomButtonClicked);
         playButton.onClick.AddListener(OnPlayButtonClicked);
         rankButton.onClick.AddListener(OnRankButtonClicked);
         allModeButton.onClick.AddListener(OnAllModeButtonClicked);
         settingsButton.onClick.AddListener(OnSettingsButtonClicked);
-        createRoomButton.onClick.AddListener(OnCreateRoomButtonClicked);
         closeButton.onClick.AddListener(OnCloseButtonClicked);
-        joinRoomButton.onClick.AddListener(OnJoinRoomButtonClicked);
 
         musicSlider.onValueChanged.AddListener(delegate { OnMusicSliderValueChanged(); });
         soundSlider.onValueChanged.AddListener(delegate { OnSoundSliderValueChanged(); });
@@ -84,6 +98,29 @@ public class HomeManager : MonoBehaviour
         musicAudioController.Play();
     }
 
+    void OnCreateRoomButtonClicked()
+    {
+        lobbyPanel.gameObject.SetActive(false);
+        roomNameCreateInputField.gameObject.SetActive(true);
+        mountOfPeopleDropdown.gameObject.SetActive(true);
+        isUsePasswordToggle.gameObject.SetActive(true);
+        roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
+        PlayButtonClickSound();
+        gameMode = GameMode.Host;
+        //BasicSpawner.instance.StartMode(GameMode.Host);
+        PlayerPrefs.SetInt("MountOfPeople", mountOfPeopleDropdown.value);
+        PlayerPrefs.SetString("RoomName", roomNameCreateInputField.text);
+        SceneManager.LoadScene(2);
+    }
+    void OnJoinRoomButtonClicked()
+    {
+        lobbyPanel.gameObject.SetActive(false);
+        roomNameJoinInputField.gameObject.SetActive(true);
+        PlayButtonClickSound();
+        gameMode = GameMode.Client;
+        //BasicSpawner.instance.StartMode(GameMode.Client);
+        SceneManager.LoadScene(2);
+    }
     void OnPlayButtonClicked()
     {
         lobbyPanel.gameObject.SetActive(true);
@@ -202,24 +239,7 @@ public class HomeManager : MonoBehaviour
     {
         roomPasswordCreateInputField.gameObject.SetActive(isUsePasswordToggle.isOn);
     }
-
-    public void JoinRoom(string roomName)
-    {
-        networkManager.JoinRoom(roomName);
-    }
-
-    void OnCreateRoomButtonClicked()
-    {
-        int maxPlayers = int.Parse(mountOfPeopleDropdown.options[mountOfPeopleDropdown.value].text);
-        networkManager.CreateRoom(roomNameCreateInputField.text, maxPlayers, isUsePasswordToggle.isOn, roomPasswordCreateInputField.text);
-        canvas.SetActive(false);
-        GameManager.instance.LoadNewScene("BattleScene");
-    }
-    void OnJoinRoomButtonClicked()
-    {
-        networkManager.JoinRoom(roomNameJoinInputField.text, null);
-        GameManager.instance.LoadNewScene("BattleScene");
-    }    
+  
     void OnCloseButtonClicked()
     {
         PlayButtonClickSound();

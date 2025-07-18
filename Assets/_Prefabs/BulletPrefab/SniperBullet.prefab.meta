@@ -1,10 +1,7 @@
 fileFormatVersion: 2
 guid: e4fdc43cc7c39fb48960032a89602f32
-PrefabImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+labels:
+- FusionPrefab
 AssetOrigin:
   serializedVersion: 1
   productId: 302702
@@ -12,3 +9,8 @@ AssetOrigin:
   packageVersion: 0.0.1
   assetPath: Assets/DuNguyn/Bullets Pack/Prefabs/SM_Bullet_04.prefab
   uploadId: 716450
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
